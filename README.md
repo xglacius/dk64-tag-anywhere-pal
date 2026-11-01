@@ -22,6 +22,12 @@ Hay dos parches, según el formato de tu ROM (aplícalos con Floating IPS, beat 
 
 Ambos dan exactamente la misma ROM, solo cambia el orden de bytes.
 
+> **Consola real / flashcart: usa el `.z64`.** Probado en N64 PAL con **ED64 Plus**: la ROM `.z64` funciona perfectamente, mientras que la versión byte-swapped (la que genera el parche `-n64`) se queda en **pantalla negra**.
+> Si tu ROM es `.n64`/`.v64`, conviértela primero a `.z64` (RomPatcher.js o Tool64; debe dar CRC32 `A28C71C6`) y aplica `dk64-tag-anywhere-v5-pal.bps`.
+> El parche `-n64` sirve para emuladores, que aceptan cualquier orden de bytes.
+>
+> Nota: aunque la ROM No-Intro se llame `.n64`, en realidad está byte-swapped (empieza por `37 80 40 12`, lo que normalmente es `.v64`). El `.z64` empieza por `80 37 12 40`.
+
 Igual que la versión USA: usa guardado **EEPROM 16K** en el emulador y, en BizHawk, activa el Expansion Slot.
 
 ## Controles y funciones
@@ -43,7 +49,12 @@ Pruebas automáticas en mupen64plus (cached interpreter + angrylion RDP software
 - Modo normal: intro completa, empieza en la casa de DK, sin tag a kongs bloqueados; las instrucciones parcheadas vuelven a sus valores originales.
 - Speed Mode se conserva tras reiniciar.
 
-No probado aún: hardware real/EverDrive, el salto de bailes de plátano dorado en la práctica, la compresión de cutscenes de Snide/K. Lumsy y T&S.
+Hardware real: probado en N64 PAL con ED64 Plus usando la ROM `.z64` — funciona.
+
+No probado aún: el salto de bailes de plátano dorado en la práctica, la compresión de cutscenes de Snide/K. Lumsy y T&S.
+
+## Opciones de diagnóstico de `build.py`
+`--no-assets` (ROM de 32 MB, sin textos/logos), `--pad64` (rellena a 64 MB) y `--no-cacheops` (sin vaciado de caché en el arranque). No hacen falta para el uso normal; se añadieron para aislar problemas en hardware.
 
 ## Compilar
 Requisitos: Python 3 + Pillow, `mips64-elf-gcc` y `armips` en el PATH.
