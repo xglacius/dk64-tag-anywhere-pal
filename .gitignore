@@ -1,0 +1,12 @@
+# ROMs (nunca se suben)
+*.z64
+*.n64
+*.v64
+*.zip
+rom/
+obj/
+asm/objects.asm
+*.sym
+*.o
+*.so
+__pycache__/

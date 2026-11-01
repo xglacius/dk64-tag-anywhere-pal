@@ -1,0 +1,54 @@
+diff --git a/src/api/api_export.ver b/src/api/api_export.ver
+index 289adf2..656ec2d 100644
+--- a/src/api/api_export.ver
++++ b/src/api/api_export.ver
+@@ -35,6 +35,7 @@ CoreAttachPlugin;
+ CoreCheatEnabled;
+ CoreDetachPlugin;
+ CoreDoCommand;
++CoreGetRdramPtr;
+ CoreErrorMessage;
+ CoreGetAPIVersions;
+ CoreGetRomSettings;
+diff --git a/src/api/frontend.c b/src/api/frontend.c
+index d9cc152..ee81796 100644
+--- a/src/api/frontend.c
++++ b/src/api/frontend.c
+@@ -462,3 +462,11 @@ EXPORT m64p_error CALL CoreGetRomSettings(m64p_rom_settings *RomSettings, int Ro
+ }
+ 
+ 
++
++/* Added for headless verification: direct pointer to RDRAM (byteswapped words, as in the core) */
++#include "main/main.h"
++#include "device/device.h"
++EXPORT void* CALL CoreGetRdramPtr(void)
++{
++    return (void*)g_dev.rdram.dram;
++}
+diff --git a/src/device/rcp/rsp/rsp_core.c b/src/device/rcp/rsp/rsp_core.c
+index 99767bc..8aa078a 100644
+--- a/src/device/rcp/rsp/rsp_core.c
++++ b/src/device/rcp/rsp/rsp_core.c
+@@ -1,3 +1,5 @@
++#include <stdio.h>
++#include <stdlib.h>
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  *   Mupen64plus - rsp_core.c                                              *
+  *   Mupen64Plus homepage: https://mupen64plus.org/                        *
+@@ -328,6 +330,7 @@ void do_SP_Task(struct rsp_core* sp)
+     uint32_t save_pc = sp->regs2[SP_PC_REG] & ~0xfff;
+ 
+     uint32_t sp_delay_time;
++    { static unsigned n, g; n++; if (sp->mem[0xfc0/4]==1) g++; if (getenv("TASKDBG") && (n % 500)==0) fprintf(stderr, "SP tasks %u gfx %u\n", n, g); } /* TASKDBG */
+ 
+     if (sp->mem[0xfc0/4] == 1)
+     {
+@@ -344,6 +347,7 @@ void do_SP_Task(struct rsp_core* sp)
+ #endif
+         sp->regs2[SP_PC_REG] |= save_pc;
+         new_frame();
++        { static int hd = -1; if (hd < 0) hd = getenv("HEADLESS_DP") != NULL; if (hd) sp->mi->regs[MI_INTR_REG] |= MI_INTR_DP; } /* HEADLESS_DP: dummy video never signals RDP completion */
+ 
+         if (sp->mi->regs[MI_INTR_REG] & MI_INTR_DP)
+         {
