@@ -5,6 +5,10 @@ Mismo código fuente que el parche USA, recompilado con las direcciones PAL.
 
 ## Aplicar el parche
 
+**Descarga directa:**
+- [dk64-tag-anywhere-v5-pal.bps](https://github.com/xglacius/dk64-tag-anywhere-pal/raw/main/patches/dk64-tag-anywhere-v5-pal.bps) — para ROM `.z64` (recomendado, consola real y emuladores)
+- [dk64-tag-anywhere-v5-pal-n64.bps](https://github.com/xglacius/dk64-tag-anywhere-pal/raw/main/patches/dk64-tag-anywhere-v5-pal-n64.bps) — para ROM `.n64` No-Intro (solo emuladores)
+
 ROM base: **Donkey Kong 64 (Europe) (En,Fr,De,Es)** en formato **.z64 (big-endian)**
 
 | | |
