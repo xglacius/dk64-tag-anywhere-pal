@@ -171,6 +171,10 @@ def main():
     ap.add_argument('--rom', required=True, help='vanilla ROM (big endian .z64)')
     ap.add_argument('--out', required=True)
     ap.add_argument('--bps', action='store_true', help='also create a .bps patch next to --out')
+    # Diagnostic options (hardware testing)
+    ap.add_argument('--no-assets', action='store_true', help='skip text/texture changes (ROM stays 32MB)')
+    ap.add_argument('--no-cacheops', action='store_true', help='do not flush caches after the boot-time code patches')
+    ap.add_argument('--pad64', action='store_true', help='pad the ROM to 64MB')
     args = ap.parse_args()
     log = print
 
@@ -180,8 +184,11 @@ def main():
         sys.exit('Unexpected ROM (sha1 %s). Expected %s.' % (sha, VANILLA_SHA1[args.version]))
 
     rom = bytearray(vanilla)
-    log('[1/5] Patching pointer table assets')
-    patch_assets(rom, args.version, log)
+    if args.no_assets:
+        log('[1/5] Skipping pointer table assets (--no-assets)')
+    else:
+        log('[1/5] Patching pointer table assets')
+        patch_assets(rom, args.version, log)
 
     log('[2/5] Compiling C code')
     compile_c(args.version, log)
@@ -194,6 +201,7 @@ def main():
     log('[3/5] Assembling with armips')
     subprocess.run(['armips', 'asm/main.asm', '-strequ', 'ROMFILE', out,
                     '-strequ', 'VERSIONFILE', 'asm/version_%s.asm' % args.version,
+                    '-equ', 'CACHEOPS', '0' if args.no_cacheops else '1',
                     '-sym', os.path.splitext(out)[0] + '.sym'], check=True, cwd=HERE)
 
     log('[4/5] Padding and fixing CRC')
@@ -201,6 +209,9 @@ def main():
         data = fh.read()
         if len(data) % 0x10:
             fh.write(b'\0' * (0x10 - len(data) % 0x10))
+            data += b'\0' * (0x10 - len(data) % 0x10)
+        if args.pad64 and len(data) < 0x4000000:
+            fh.write(b'\xff' * (0x4000000 - len(data)))
     sys.path.insert(0, HERE)
     from n64crc import fixCRC
     fixCRC(out)

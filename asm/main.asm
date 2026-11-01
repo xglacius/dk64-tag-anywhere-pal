@@ -54,6 +54,7 @@ displacedVanillaBootCode:
 	LUI t4, hi(frameHookLocation)
 	SW t3, lo(frameHookLocation) (t4)
 	; Make sure the instruction writes reach RAM before the code runs
+.if CACHEOPS == 1
 	JAL osWritebackDCacheAll
 	NOP
 	LUI a0, hi(globalCodeStart)
@@ -61,6 +62,7 @@ displacedVanillaBootCode:
 	LUI a1, hi(globalCodeSize)
 	JAL osInvalICache
 	ADDIU a1, a1, lo(globalCodeSize)
+.endif
 	; --- Vanilla code displaced by the hook ---
 	LUI v0, 0x8001
 	ADDIU v0, v0, bootLui2

@@ -72,7 +72,7 @@ def create(src, tgt, meta=b''):
     index = {}
     for p in range(0, len(src) - B, 4):
         index.setdefault(src[p:p + B], p)
-    o = 0; srel = 0; pending = bytearray()
+    o = 0; srel = 0; trel = 0; pending = bytearray()
 
     def flush():
         nonlocal pending
@@ -98,6 +98,19 @@ def create(src, tgt, meta=b''):
                 d = p - srel
                 _wnum(out, (abs(d) << 1) | (1 if d < 0 else 0))
                 srel = p + L; o += L; continue
+        # long run of a repeated byte -> one literal + TargetCopy (self-overlapping)
+        r = 1
+        while o + r < n and tgt[o + r] == tgt[o] and r < 0x1000000:
+            r += 1
+        if r >= 64:
+            pending.append(tgt[o]); flush()
+            src_pos = o  # TargetCopy reads from the byte just written
+            d = src_pos - trel
+            _wnum(out, ((r - 2) << 2) | 3)
+            _wnum(out, (abs(d) << 1) | (1 if d < 0 else 0))
+            trel = src_pos + (r - 1)
+            o += r
+            continue
         pending.append(tgt[o]); o += 1
     flush()
     out += zlib.crc32(src).to_bytes(4, 'little') + zlib.crc32(tgt).to_bytes(4, 'little')
