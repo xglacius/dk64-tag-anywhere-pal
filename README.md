@@ -1,68 +1,73 @@
-# Donkey Kong 64 – Tag Anywhere V5 · Port a PAL (Europa En,Fr,De,Es)
+# Donkey Kong 64 – Tag Anywhere V5 · PAL port (Europe En,Fr,De,Es)
 
-Port del parche **Tag Anywhere V5** de Isotarge (https://github.com/Isotarge/dk64-tag-anywhere) a la ROM europea.
-Mismo código fuente que el parche USA, recompilado con las direcciones PAL.
+Port of Isotarge's **Tag Anywhere V5** patch (https://github.com/Isotarge/dk64-tag-anywhere) to the European ROM.
+Same source code as the USA patch, rebuilt with the PAL addresses.
 
-## Aplicar el parche
+![Tag Anywhere running on the PAL ROM](docs/screenshots_pal.png)
 
-**Descarga directa:**
-- [dk64-tag-anywhere-v5-pal.bps](https://github.com/xglacius/dk64-tag-anywhere-pal/raw/main/patches/dk64-tag-anywhere-v5-pal.bps) — para ROM `.z64` (recomendado, consola real y emuladores)
-- [dk64-tag-anywhere-v5-pal-n64.bps](https://github.com/xglacius/dk64-tag-anywhere-pal/raw/main/patches/dk64-tag-anywhere-v5-pal-n64.bps) — para ROM `.n64` No-Intro (solo emuladores)
+## Applying the patch
 
-ROM base: **Donkey Kong 64 (Europe) (En,Fr,De,Es)** en formato **.z64 (big-endian)**
+**Direct download:**
+- [dk64-tag-anywhere-v5-pal.bps](https://github.com/xglacius/dk64-tag-anywhere-pal/raw/main/patches/dk64-tag-anywhere-v5-pal.bps) — for a `.z64` ROM (recommended; real hardware and emulators)
+- [dk64-tag-anywhere-v5-pal-n64.bps](https://github.com/xglacius/dk64-tag-anywhere-pal/raw/main/patches/dk64-tag-anywhere-v5-pal-n64.bps) — for the No-Intro `.n64` ROM (emulators only)
+
+Base ROM: **Donkey Kong 64 (Europe) (En,Fr,De,Es)**
 
 | | |
 |---|---|
-| SHA-1 ROM base (.z64) | `F96AF883845308106600D84E0618C1A066DC6676` |
-| CRC32 ROM base (.z64) | `A28C71C6` |
-| SHA-1 ROM resultante | `EFCC466967EA39A406B6CC12D107ABE2F96E1CC1` |
+| Base ROM SHA-1 (.z64) | `F96AF883845308106600D84E0618C1A066DC6676` |
+| Base ROM CRC32 (.z64) | `A28C71C6` |
+| Patched ROM SHA-1 (.z64) | `EFCC466967EA39A406B6CC12D107ABE2F96E1CC1` |
 
-Hay dos parches, según el formato de tu ROM (aplícalos con Floating IPS, beat o https://www.marcrobledo.com/RomPatcher.js/):
+There are two patches, depending on your ROM's byte order (apply with Floating IPS, beat or https://www.marcrobledo.com/RomPatcher.js/):
 
-| Parche | ROM base | CRC32 base | Resultado |
+| Patch | Base ROM | Base CRC32 | Output |
 |---|---|---|---|
 | `dk64-tag-anywhere-v5-pal.bps` | `.z64` (big-endian) | `A28C71C6` | `.z64` |
-| `dk64-tag-anywhere-v5-pal-n64.bps` | `.n64` (byte-swapped, la de No-Intro) | `FC37B06A` | `.n64` |
+| `dk64-tag-anywhere-v5-pal-n64.bps` | `.n64` (byte-swapped, No-Intro) | `FC37B06A` | `.n64` |
 
-Ambos dan exactamente la misma ROM, solo cambia el orden de bytes.
+Both produce exactly the same ROM; only the byte order differs.
 
-> **Consola real / flashcart: usa el `.z64`.** Probado en N64 PAL con **ED64 Plus**: la ROM `.z64` funciona perfectamente, mientras que la versión byte-swapped (la que genera el parche `-n64`) se queda en **pantalla negra**.
-> Si tu ROM es `.n64`/`.v64`, conviértela primero a `.z64` (RomPatcher.js o Tool64; debe dar CRC32 `A28C71C6`) y aplica `dk64-tag-anywhere-v5-pal.bps`.
-> El parche `-n64` sirve para emuladores, que aceptan cualquier orden de bytes.
+> **Real hardware / flashcarts: use the `.z64`.** Tested on a PAL N64 with an **ED64 Plus**: the `.z64` ROM works perfectly, while the byte-swapped build (output of the `-n64` patch) gives a **black screen**.
+> If your ROM is `.n64`/`.v64`, convert it to `.z64` first (RomPatcher.js or Tool64; the CRC32 must be `A28C71C6`) and apply `dk64-tag-anywhere-v5-pal.bps`.
+> The `-n64` patch is meant for emulators, which accept any byte order.
 >
-> Nota: aunque la ROM No-Intro se llame `.n64`, en realidad está byte-swapped (empieza por `37 80 40 12`, lo que normalmente es `.v64`). El `.z64` empieza por `80 37 12 40`.
+> Note: even though the No-Intro ROM is named `.n64`, it is actually byte-swapped (it starts with `37 80 40 12`, which is normally `.v64`). A `.z64` starts with `80 37 12 40`.
 
-Igual que la versión USA: usa guardado **EEPROM 16K** en el emulador y, en BizHawk, activa el Expansion Slot.
+As with the USA version: set the emulator save type to **EEPROM 16K**, and in BizHawk enable the Expansion Slot.
 
-## Controles y funciones
-Iguales que el original: D-Pad derecha o L = siguiente kong, D-Pad izquierda = anterior (DK → Diddy → Lanky → Tiny → Chunky).
-La opción **SPEED MODE** sustituye a STORY SKIP en el menú de opciones (traducida en los 4 idiomas: MODE VITESSE / SPEED-MODUS / MODO VELOCIDAD).
+## Controls and features
+Same as the original: D-Pad Right or L = next kong, D-Pad Left = previous kong (DK → Diddy → Lanky → Tiny → Chunky).
+The **SPEED MODE** option replaces STORY SKIP in the options menu (translated into all 4 languages: MODE VITESSE / SPEED-MODUS / MODO VELOCIDAD).
 
-## Diferencias PAL encontradas (y corregidas)
-- Todas las direcciones de código y datos (≈40) re-mapeadas por firma de instrucciones y cruzadas con el dk64-practice-rom.
-- **Flags temporales +1** en PAL (las intros largas de jefes del Speed Mode: 104→105, etc.).
-- **Acción de intercambio de kong 0x3B → 0x3C** (la lista de acciones PAL tiene una entrada extra). Sin esto el tag no cambia de kong.
-- Índices de ficheros distintos: textos (12/13 y 12/37 con 4 idiomas), texturas (14/97, 14/179, 14/47).
-- El código propio va en ROM `0x1FF5000` (la PAL ocupa hasta `0x1FF4E7F`) y en RAM `0x805D3E00` (heap reducido 0x20000, como en USA).
-- Las parches al código global (heap, Object Model 2) se aplican en el hook de arranque en lugar de recomprimir el bloque de código, con writeback/invalidación de caché.
+## PAL differences found (and fixed)
+- All code and data addresses (~40) remapped via masked instruction signatures and cross-checked against dk64-practice-rom.
+- **Temporary flags are +1** on PAL (the Speed Mode long boss intro flags: 104→105, etc.).
+- **Kong swap action 0x3B → 0x3C** (the PAL action list has one extra entry). Without this, tagging does not change the kong.
+- Different file indices: text (12/13 and 12/37, 4 languages each), textures (14/97, 14/179, 14/47).
+- The custom code lives at ROM `0x1FF5000` (PAL data ends at `0x1FF4E7F`) and RAM `0x805D3E00` (heap lowered by 0x20000, as on USA).
+- The global code patches (heap, Object Model 2) are applied from the boot hook instead of recompressing the code block, followed by a cache writeback/invalidate.
 
-## Verificación hecha
-Pruebas automáticas en mupen64plus (cached interpreter + angrylion RDP software):
-- La ROM arranca, muestra logos/título de Tag Anywhere y llega al menú.
-- Speed Mode: partida nueva directamente en DK Isles, movimientos desbloqueados; tag D-Pad der./izq./L recorre DK→Diddy→Lanky→Tiny→Chunky→DK y hacia atrás, idéntico al parche USA oficial en la misma prueba.
-- Modo normal: intro completa, empieza en la casa de DK, sin tag a kongs bloqueados; las instrucciones parcheadas vuelven a sus valores originales.
-- Speed Mode se conserva tras reiniciar.
+## Verification
+Automated tests in mupen64plus (cached interpreter + angrylion software RDP):
+- The ROM boots, shows the Tag Anywhere logos/title and reaches the main menu.
+- Speed Mode: a new file starts directly in DK Isles with moves unlocked; D-Pad Right/Left/L cycle DK→Diddy→Lanky→Tiny→Chunky→DK and back, identical to the official USA patch in the same test.
+- Normal mode: full intro, starts in DK's house, no tagging to locked kongs; patched instructions are restored to their original values.
+- Speed Mode is remembered across resets.
 
-Hardware real: probado en N64 PAL con ED64 Plus usando la ROM `.z64` — funciona.
+Real hardware: tested on a PAL N64 with an ED64 Plus using the `.z64` ROM — works.
 
-No probado aún: el salto de bailes de plátano dorado en la práctica, la compresión de cutscenes de Snide/K. Lumsy y T&S.
+Not tested yet: in-game Golden Banana dance skip, Snide/K. Lumsy cutscene compression and faster Troff 'n' Scoff feeding.
 
-## Opciones de diagnóstico de `build.py`
-`--no-assets` (ROM de 32 MB, sin textos/logos), `--pad64` (rellena a 64 MB) y `--no-cacheops` (sin vaciado de caché en el arranque). No hacen falta para el uso normal; se añadieron para aislar problemas en hardware.
+## `build.py` diagnostic options
+`--no-assets` (32 MB ROM, no text/logo changes), `--pad64` (pad to 64 MB) and `--no-cacheops` (no cache flush at boot). Not needed for normal use; added to isolate hardware issues.
 
-## Compilar
-Requisitos: Python 3 + Pillow, `mips64-elf-gcc` y `armips` en el PATH.
+## Building
+Requirements: Python 3 + Pillow, `mips64-elf-gcc` and `armips` in PATH.
 
     python3 build.py --version pal --rom "DK64 (Europe).z64" --out rom/dk64-tag-anywhere-v5-pal.z64 --bps
 
-`--version us` construye la versión USA con el mismo pipeline.
+`--version us` builds the USA version with the same pipeline.
+
+## Credits
+Original patch: Isotarge and the DK64 community (see `README_ORIGINAL_USA.md`).
