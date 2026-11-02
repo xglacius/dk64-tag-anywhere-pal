@@ -37,7 +37,7 @@ Both produce exactly the same ROM; only the byte order differs.
 As with the USA version: set the emulator save type to **EEPROM 16K**, and in BizHawk enable the Expansion Slot.
 
 ## Changelog
-- **PAL 1.1** – Fixed a crash (game freezes on the debug crash screen) when tagging while a collision was pending, e.g. while touching or hitting an enemy. Tagging is now also denied during Strong Kong / Orangstand Sprint, Mini Monkey / Hunky Chunky and while touching an object (collectable, pad, switch). Checks ported from the DK64 Randomizer's Tag Anywhere. This crash also exists in the original USA V5 patch.
+- **PAL 1.1** – Fixed a crash (game freezes on the debug crash screen) when tagging while a collision was pending, e.g. while touching or hitting an enemy. Tagging is now also denied during Strong Kong / Orangstand Sprint, Mini Monkey / Hunky Chunky and while touching an object (collectable, pad, switch). Checks ported from the DK64 Randomizer's Tag Anywhere. The original USA V5 code has no such check, so it is most likely affected too (not verified).
 - **PAL 1.0** – First release.
 
 ## Controls and features
