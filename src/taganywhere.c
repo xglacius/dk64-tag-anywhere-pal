@@ -405,7 +405,7 @@ void tagAnywhere(void) {
 		return;
 	}
 	// In tag barrel / paused
-	if (TBVoidByte & 2) {
+	if (TBVoidByte & 3) {
 		tagDenied();
 		return;
 	}
@@ -466,6 +466,31 @@ void tagAnywhere(void) {
 		}
 	}
 	if (inBadMovementState()) {
+		tagDenied();
+		return;
+	}
+	// Extra safety checks (ported from the DK64 Randomizer's Tag Anywhere)
+	if (Player) {
+		// Pending collisions reference the current kong's model bones.
+		// Swapping kongs while they are queued crashes the game (null bone
+		// pointer in the actor collision handler), e.g. when touching an enemy.
+		if (Player->collision_queue_pointer) {
+			tagDenied();
+			return;
+		}
+		// Strong Kong (0x10) / Orangstand Sprint (0x20) active
+		if (Player->strong_kong_ostand_bitfield & 0x30) {
+			tagDenied();
+			return;
+		}
+	}
+	// Mini Monkey / Hunky Chunky (swap object size: 0 = mini, 1 = normal, 2 = big)
+	if (SwapObject && (*((s8*)SwapObject + 0x2C0) != 1)) {
+		tagDenied();
+		return;
+	}
+	// Touching an object model 2 item (collectable, pad, switch...) this frame
+	if (ModelTwoTouchCount > 0) {
 		tagDenied();
 		return;
 	}

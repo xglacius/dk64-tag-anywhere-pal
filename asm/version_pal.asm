@@ -45,3 +45,4 @@ crcPatchRAM equ 0x800026D4
 .definelabel Character, 0x80748EDC
 .definelabel NewlyPressedControllerInput, 0x807ECC86
 .definelabel SwapObject, 0x807FC864
+.definelabel ModelTwoTouchCount, 0x807FD6D8
