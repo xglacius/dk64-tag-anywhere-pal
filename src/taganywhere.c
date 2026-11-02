@@ -469,7 +469,20 @@ void tagAnywhere(void) {
 		tagDenied();
 		return;
 	}
-	// Extra safety checks (ported from the DK64 Randomizer's Tag Anywhere)
+	if (Character > 4) {
+		tagDenied();
+		return;
+	}
+
+	if (NewlyPressedControllerInput.Buttons & R_JPAD || NewlyPressedControllerInput.Buttons & L_TRIG) {
+		tagDirection = 1;
+	} else if (NewlyPressedControllerInput.Buttons & L_JPAD) {
+		tagDirection = -1;
+	} else {
+		return;
+	}
+	// Extra safety checks (ported from the DK64 Randomizer's Tag Anywhere).
+	// Only evaluated when a tag button was pressed, so nothing changes on frames without input.
 	if (Player) {
 		// Pending collisions reference the current kong's model bones.
 		// Swapping kongs while they are queued crashes the game (null bone
@@ -492,18 +505,6 @@ void tagAnywhere(void) {
 	// Touching an object model 2 item (collectable, pad, switch...) this frame
 	if (ModelTwoTouchCount > 0) {
 		tagDenied();
-		return;
-	}
-	if (Character > 4) {
-		tagDenied();
-		return;
-	}
-
-	if (NewlyPressedControllerInput.Buttons & R_JPAD || NewlyPressedControllerInput.Buttons & L_TRIG) {
-		tagDirection = 1;
-	} else if (NewlyPressedControllerInput.Buttons & L_JPAD) {
-		tagDirection = -1;
-	} else {
 		return;
 	}
 

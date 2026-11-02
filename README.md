@@ -17,7 +17,7 @@ Base ROM: **Donkey Kong 64 (Europe) (En,Fr,De,Es)**
 |---|---|
 | Base ROM SHA-1 (.z64) | `F96AF883845308106600D84E0618C1A066DC6676` |
 | Base ROM CRC32 (.z64) | `A28C71C6` |
-| Patched ROM SHA-1 (.z64) | `4EF26DD1CD74FFA9ACF9A2ACE6F4FFEE0B0E11E2` |
+| Patched ROM SHA-1 (.z64) | `F8211CF24ACA77BCA8579D1AFC34A2E38729D9F3` |
 
 There are two patches, depending on your ROM's byte order (apply with Floating IPS, beat or https://www.marcrobledo.com/RomPatcher.js/):
 
@@ -37,7 +37,8 @@ Both produce exactly the same ROM; only the byte order differs.
 As with the USA version: set the emulator save type to **EEPROM 16K**, and in BizHawk enable the Expansion Slot.
 
 ## Changelog
-- **PAL 1.1** – Fixed a crash (game freezes on the debug crash screen) when tagging while a collision was pending, e.g. while touching or hitting an enemy. Tagging is now also denied during Strong Kong / Orangstand Sprint, Mini Monkey / Hunky Chunky and while touching an object (collectable, pad, switch). Checks ported from the DK64 Randomizer's Tag Anywhere. The original USA V5 code has no such check, so it is most likely affected too (not verified).
+- **PAL 1.1b** – Same fix as 1.1, but the new checks only run when a tag button is pressed. The 1.1 build gave a black screen at boot on a PAL N64 with an ED64 Plus (not reproducible in emulators); 1.1b is confirmed working on that hardware.
+- **PAL 1.1** (withdrawn) – Fixed a crash (game freezes on the debug crash screen) when tagging while a collision was pending, e.g. while touching or hitting an enemy. Tagging is now also denied during Strong Kong / Orangstand Sprint, Mini Monkey / Hunky Chunky and while touching an object (collectable, pad, switch). Checks ported from the DK64 Randomizer's Tag Anywhere. The original USA V5 code has no such check, so it is most likely affected too (not verified).
 - **PAL 1.0** – First release.
 
 ## Controls and features
